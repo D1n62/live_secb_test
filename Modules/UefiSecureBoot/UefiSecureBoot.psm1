@@ -627,14 +627,4 @@ function Test-AdminPrivileges {
     return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-Export-ModuleMember -Function `
-    Test-SecureBootEnabled,
-    Get-SecureBootPlatformStatus,
-    Get-SecureBootCertificateStatus,
-    Get-SecureBootReadiness,
-    Get-BootManagerSignature,
-    Start-SecureBootCertificateUpdate,
-    Test-AdminPrivileges,
-    Get-SecureBootDatabaseSources,
-    Get-BoardInfo,
-    Send-SecureBootWebhook
+Export-ModuleMember -Function * -Alias * -Variable *
