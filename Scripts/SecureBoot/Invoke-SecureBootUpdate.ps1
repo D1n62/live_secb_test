@@ -186,8 +186,6 @@ function Write-SummaryTable {
     Write-Host ''
 }
 
-Export-ModuleMember -Function Write-SectionHeader, Write-StatusLine, Write-InfoLine, Write-ActionMessage, Write-SummaryTable
-
 
 
 
@@ -987,8 +985,6 @@ function Resume-BitLockerAfterUpdate {
         return [PSCustomObject]@{ Resumed = $false; MountPoint = $MountPoint }
     }
 }
-
-Export-ModuleMember -Function Get-BitLockerProtectionStatus, Suspend-BitLockerForUpdate, Resume-BitLockerAfterUpdate
 
 #endregion
 
