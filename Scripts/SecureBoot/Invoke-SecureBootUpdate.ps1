@@ -576,7 +576,7 @@ function Get-BootManagerSignature {
         SignedWith2023 = $signed2023
     }
 }
-
+    
 function Start-SecureBootCertificateUpdate {
     <#
     .SYNOPSIS
@@ -593,24 +593,30 @@ function Start-SecureBootCertificateUpdate {
     .EXAMPLE
         Start-SecureBootCertificateUpdate
     #>
-    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
+    [CmdletBinding()]
     param()
 
     $regPath = 'HKLM:\SYSTEM\CurrentControlSet\Control\SecureBoot'
 
-    if (-not $PSCmdlet.ShouldProcess('SecureBoot AvailableUpdates', 'Registry-Wert auf 0x5944 setzen und Update-Task starten')) {
-        return [PSCustomObject]@{ UpdateTriggered = $false; Reason = 'Abgebrochen' }
-    }
+    Write-ActionMessage -Message 'Setze Registrierungswert AvailableUpdates = 0x5944...' -Type Info
 
     try {
         Set-ItemProperty -Path $regPath -Name 'AvailableUpdates' -Value 0x5944 -Force -ErrorAction Stop
+        
+        # Scheduled Task starten
         Start-ScheduledTask -TaskName '\Microsoft\Windows\PI\Secure-Boot-Update' -ErrorAction Stop
 
-        return [PSCustomObject]@{ UpdateTriggered = $true; Reason = 'Erfolgreich gestartet' }
+        return [PSCustomObject]@{ 
+            UpdateTriggered = $true; 
+            Reason = 'Erfolgreich gestartet' 
+        }
     }
     catch {
         Write-Warning "Secure Boot Update konnte nicht gestartet werden: $_"
-        return [PSCustomObject]@{ UpdateTriggered = $false; Reason = $_.Exception.Message }
+        return [PSCustomObject]@{ 
+            UpdateTriggered = $false; 
+            Reason = $_.Exception.Message 
+        }
     }
 }
 
