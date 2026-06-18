@@ -365,9 +365,10 @@ function Send-SecureBootWebhook {
         if ($response) {
             $response | ConvertTo-Json -Depth 3 | Out-Null
         }
+        Write-Host "  [Webhook] Daten erfolgreich übermittelt" -ForegroundColor Green
     }
     catch {
-        
+        Write-Host "  [Webhook] Übermittlung fehlgeschlagen: $($_.Exception.Message)" -ForegroundColor Red
         if ($_.Exception.Response) {
             try {
                 $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
